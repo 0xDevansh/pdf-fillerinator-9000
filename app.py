@@ -14,7 +14,7 @@ with st.sidebar:
     st.header("LLM Settings")
     api_base = st.text_input("API Base URL", value="https://openrouter.ai/api/v1", help="URL of the LLM Provider")
     api_key = st.text_input("OpenRouter API Key", type="password", help="Your OpenRouter or provider API Key")
-    model_name = st.text_input("Model Name", value="qwen/qwen-2.5-vl-72b-instruct", help="Model ID (e.g., qwen/qwen-2.5-vl-72b-instruct)")
+    model_name = st.text_input("Model Name", value="qwen/qwen3-vl-235b-a22b-instruct", help="Model ID (e.g., qwen/qwen3-vl-235b-a22b-instruct)")
     
     st.info("Using OpenRouter (or compatible) for Qwen-VL.")
 

@@ -76,8 +76,12 @@ def overlay_text(pdf_path, filled_fields, output_path):
         # Denormalize coordinates (0-1000)
         x1, y1, x2, y2 = field['box_2d']
         
+        # Calculate width in normalized units
+        box_width = x2 - x1
+        margin = box_width * 0.05
+        
         rect = fitz.Rect(
-            x1 * page_width / 1000,
+            (x1 + margin) * page_width / 1000,
             y1 * page_height / 1000,
             x2 * page_width / 1000,
             y2 * page_height / 1000

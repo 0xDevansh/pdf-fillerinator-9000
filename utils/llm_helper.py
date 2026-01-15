@@ -7,7 +7,7 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-def detect_form_fields(image_path, api_base="https://openrouter.ai/api/v1", api_key=None, model="qwen/qwen-2.5-vl-72b-instruct"):
+def detect_form_fields(image_path, api_base="https://openrouter.ai/api/v1", api_key=None, model="qwen/qwen3-vl-235b-a22b-instruct"):
     """
     Sends the image to an OpenAI-compatible LLM (e.g., OpenRouter) to detect form fields.
     Returns a list of dicts: {'label': str, 'box_2d': [x1, y1, x2, y2]}
@@ -37,9 +37,11 @@ def detect_form_fields(image_path, api_base="https://openrouter.ai/api/v1", api_
         "3.  **Selection Mechanisms:** Checkboxes (square), radio buttons (circular), or comb fields (segmented boxes for individual characters).\n\n"
         "**STRICT CONSTRAINTS:**\n"
         "1.  **Exclusion:** Do NOT include the field label in the bounding box. (e.g., If the form says \"Name: [_____]\", box ONLY the \"[_____]\" area. Exclude the word \"Name:\").\n"
-        "2.  **Tightness:** The bounding box must be tightly cropped to the visual boundaries of the input area.\n"
-        "3.  **Coordinate Format:** Return coordinates on a **0-1000 integer scale**. Format: `[xmin, ymin, xmax, ymax]`. Example: `[100, 200, 500, 250]`.\n"
-        "4.  **Granularity:** If there is a \"Comb Field\" (multiple small boxes for one ID number), create ONE bounding box for the entire group, not individual boxes for each character.\n\n"
+        "2.  **Margin:** Leave a small visual MARGIN between the label text and the start of the bounding box. Do not let the box touch the label.\n"
+        "3.  **Line Alignment:** For horizontal lines (underscores), the bounding box should cover the empty space *immediately above* the line (where text is written) and the line itself. Do not position it too high or too low.\n"
+        "4.  **Tightness:** The bounding box must be tightly cropped to the visual boundaries of the input area (width-wise), but tall enough to contain handwriting.\n"
+        "5.  **Coordinate Format:** Return coordinates on a **0-1000 integer scale**. Format: `[xmin, ymin, xmax, ymax]`. Example: `[100, 200, 500, 250]`.\n"
+        "6.  **Granularity:** If there is a \"Comb Field\" (multiple small boxes for one ID number), create ONE bounding box for the entire group, not individual boxes for each character.\n\n"
         "**OUTPUT FORMAT:**\n"
         "Return ONLY a valid JSON object containing a list of fields. Do not include markdown formatting (like ```json). Use the following schema:\n\n"
         "{\n"
