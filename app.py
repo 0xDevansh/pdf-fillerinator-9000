@@ -8,6 +8,22 @@ from utils.sarvam_helper import speak_text, transcribe_audio_bytes, clean_transc
 
 st.set_page_config(page_title="PDF Form Filler (Voice Enabled)", layout="wide")
 
+# Load keys from keys.txt if exists
+def load_keys():
+    keys = {}
+    try:
+        with open("keys.txt", "r") as f:
+            for line in f:
+                line = line.strip()
+                if "=" in line:
+                    key, value = line.split("=", 1)
+                    keys[key.strip()] = value.strip().rstrip(".")  # Remove trailing dots
+    except FileNotFoundError:
+        pass
+    return keys
+
+KEYS = load_keys()
+
 st.title("🤖 AI PDF Form Filler with Voice")
 st.markdown("Upload a PDF, let AI find the blanks, fill them in using **voice** or text, and download the result!")
 
@@ -15,8 +31,8 @@ st.markdown("Upload a PDF, let AI find the blanks, fill them in using **voice** 
 with st.sidebar:
     st.header("🔧 LLM Settings")
     api_base = st.text_input("API Base URL", value="https://openrouter.ai/api/v1", help="URL of the LLM Provider")
-    api_key = st.text_input("OpenRouter API Key", type="password", help="Your OpenRouter or provider API Key")
-    model_name = st.text_input("Model Name", value="qwen/qwen-2.5-vl-72b-instruct", help="Model ID (e.g., qwen/qwen-2.5-vl-72b-instruct)")
+    api_key = st.text_input("OpenRouter API Key", type="password", value=KEYS.get("OPENROUTER", ""), help="Your OpenRouter API Key")
+    model_name = st.text_input("Model Name", value=KEYS.get("MODEL_NAME", "qwen/qwen-2.5-vl-72b-instruct"), help="Model ID")
     
     st.divider()
     
@@ -24,8 +40,8 @@ with st.sidebar:
     sarvam_api_key = st.text_input(
         "Sarvam API Key", 
         type="password", 
-        value=os.environ.get("SARVAM_API_KEY", ""),
-        help="Your Sarvam AI API Key for voice features. Get one at dashboard.sarvam.ai"
+        value=KEYS.get("SARVAM", os.environ.get("SARVAM_API_KEY", "")),
+        help="Your Sarvam AI API Key for voice features"
     )
     
     voice_language = st.selectbox(

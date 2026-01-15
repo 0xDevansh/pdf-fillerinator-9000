@@ -1,0 +1,6 @@
+SARVAM=sk_hestuz6j_PJF6aKluPRSYgtpQkosIREUw
+OPENROUTER=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
+MODEL_NAME=qwen/qwen3-vl-235b-a22b-instruct
+CF_AI_GATEWAY=k0s6Ti8SiGrmKkwKSNqc-c6c_d7p4WkIsPpJV6Tw
+TESTINGCODE="curl "https://api.cloudflare.com/client/v4/accounts/654eee24858712249942e6302fc9eff7/tokens/verify" \
+-H "Authorization: Bearer k0s6Ti8SiGrmKkwKSNqc-c6c_d7p4WkIsPpJV6Tw""
