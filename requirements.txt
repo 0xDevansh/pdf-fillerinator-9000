@@ -1,0 +1,8 @@
+streamlit
+pymupdf
+pdf2image
+openai
+Pillow
+reportlab
+python-dotenv
+np
