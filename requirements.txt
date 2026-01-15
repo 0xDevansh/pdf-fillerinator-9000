@@ -6,3 +6,5 @@ Pillow
 reportlab
 python-dotenv
 np
+sarvamai
+audio-recorder-streamlit
